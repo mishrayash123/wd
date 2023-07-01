@@ -7,6 +7,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 // Import your screen components
 import Home from './screens/Home';
 import Profile from './screens/Profile';
+import Login from './screens/Login';
+import Register from './screens/Register';
+import Forget from './screens/Forget';
 
 
 const Tab = createBottomTabNavigator();
@@ -15,18 +18,12 @@ const Stack = createStackNavigator();
 // const HomeStack = () => {
 //   return (
 //     <Stack.Navigator>
-//       <Stack.Screen name="Home" component={Home} />
+//       <Stack.Screen name="Forget" component={Forget} />
 //     </Stack.Navigator>
 //   );
 // };
 
-// const ProfileStack = () => {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name="Profile" component={Profile} />
-//     </Stack.Navigator>
-//   );
-// };
+
 
 const App = () => {
   return (
@@ -44,7 +41,7 @@ const App = () => {
 />
 <Tab.Screen
   name="Profile"
-  component={Profile}
+  component={Register}
   options={{
     tabBarLabel: 'Profile',
     tabBarIcon: ({ color, size }) => (
@@ -52,7 +49,21 @@ const App = () => {
     ),
   }}
 />
-  
+<Tab.Screen
+  name="Register"
+  component={Register}
+  options={{ tabBarVisible: false }}
+/>
+<Tab.Screen
+  name="Login"
+  component={Login}
+  options={{ tabBarVisible: false }}
+/>
+<Tab.Screen
+  name="Forget"
+  component={Forget}
+  options={{ tabBarVisible: false }}
+/>
       </Tab.Navigator>
     </NavigationContainer>
   );
