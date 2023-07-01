@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import {auth} from './firebase-config';
 import {
   StyleSheet,
   Text,
@@ -14,6 +16,19 @@ import {
 export default function Login({ navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [err, seterr] = useState("");
+
+  const login = async () => {
+    signInWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
+        const user = userCredential.user;
+        // console.log("user signed in successfully")
+        // ...
+    }).catch((error) => {
+        const errorCode = error.code;
+        seterr(errorCode);
+    });
+    
+};
 
 
   return (
@@ -36,14 +51,15 @@ export default function Login({ navigation}) {
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         /> 
-      </View> 
+      </View>
+      <Text style={styles.err}>{err}</Text>  
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Forget")}>Forget Password ?</Text> 
       </TouchableOpacity> 
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Register")}>New user ?</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => login()}>
         <Text style={styles.loginText}>Log in</Text> 
       </TouchableOpacity> 
     </View> 
@@ -89,5 +105,8 @@ const styles = StyleSheet.create({
   },
   loginText :{
     color : "white"
+  },
+  err : {
+    color :"red"
   }
 });

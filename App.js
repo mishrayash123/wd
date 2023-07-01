@@ -41,7 +41,7 @@ const App = () => {
 />
 <Tab.Screen
   name="Profile"
-  component={Register}
+  component={Profile}
   options={{
     tabBarLabel: 'Profile',
     tabBarIcon: ({ color, size }) => (

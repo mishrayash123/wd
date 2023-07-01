@@ -1,5 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import {sendPasswordResetEmail} from "firebase/auth";
+import {auth} from './firebase-config';
 import {
   StyleSheet,
   Text,
@@ -11,8 +13,20 @@ import {
 } from "react-native";
 
 
-export default function Register() {
+export default function Forget() {
   const [email, setEmail] = useState("");
+  const [err, seterr] = useState("");
+
+
+  const forgetpassword = async () => {
+    sendPasswordResetEmail(auth, email).then(() => {
+        // alert("Password reset email sent to your provided email");
+    }).catch((error) => {
+        const errorCode = error.code;
+        seterr(errorCode);
+    });
+
+};
   return (
     <View style={styles.container}>
       {/* <Image style={styles.image} source={require("./assets/log2.png")} />  */}
@@ -25,8 +39,9 @@ export default function Register() {
           placeholderTextColor="#003f5c"
           onChangeText={(email) => setEmail(email)}
         /> 
-      </View>  
-      <TouchableOpacity style={styles.loginBtn}>
+      </View>
+      <Text style={styles.err}>{err}</Text>  
+      <TouchableOpacity style={styles.loginBtn} onPress={() => forgetpassword()}>
         <Text style={styles.loginText}>Send</Text> 
       </TouchableOpacity> 
     </View> 
@@ -66,6 +81,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FF1493",
+    backgroundColor: "black",
   },
+  loginText :{
+    color : "white"
+  },
+  err : {
+    color :"red",
+    marginBottom: 5,
+  }
 });

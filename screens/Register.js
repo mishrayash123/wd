@@ -9,11 +9,24 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {auth} from './firebase-config';
 
 
 export default function Register({ navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [err, seterr] = useState("");
+
+  const signup = async () => {
+    createUserWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
+        const user = userCredential.user;
+        // console.log("user signed up successfully")
+    }).catch((error) => {
+        const errorCode = error.code;
+        seterr(errorCode);
+    });
+};
 
 
   return (
@@ -36,11 +49,12 @@ export default function Register({ navigation}) {
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         /> 
-      </View>  
+      </View>
+      <Text style={styles.err}>{err}</Text>    
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Login")}>Already have an Account ?</Text> 
       </TouchableOpacity> 
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => signup()}>
         <Text style={styles.loginText}>Register</Text> 
       </TouchableOpacity> 
     </View> 
@@ -86,5 +100,8 @@ const styles = StyleSheet.create({
   },
   loginText :{
     color : "white"
+  },
+  err : {
+    color :"red"
   }
 });
