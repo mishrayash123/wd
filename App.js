@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+// import { onAuthStateChanged } from "firebase/auth";
+// import { auth} from "./screens/firebase-config";
 
 // Import your screen components
 import Home from './screens/Home';
@@ -15,6 +17,7 @@ import Forget from './screens/Forget';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
+
 // const HomeStack = () => {
 //   return (
 //     <Stack.Navigator>
@@ -26,6 +29,18 @@ const Stack = createStackNavigator();
 
 
 const App = () => {
+  // const [uid1,setuid1]=useState("ojiji");
+
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setuid1(user.uid);
+  //     } else {
+  //       setuid1("");
+  //     }
+  //   });
+  // }, [auth.currentUser]);
+
   return (
     <NavigationContainer>
       <Tab.Navigator>
@@ -42,6 +57,7 @@ const App = () => {
 <Tab.Screen
   name="Profile"
   component={Profile}
+  // initialParams={{ uid: uid1}}
   options={{
     tabBarLabel: 'Profile',
     tabBarIcon: ({ color, size }) => (
@@ -68,7 +84,6 @@ const App = () => {
     </NavigationContainer>
   );
 };
-
 
 
 
