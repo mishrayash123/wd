@@ -2,7 +2,8 @@ import {
     View,
     Text,
     StyleSheet,
-    Image
+    Image,
+    ScrollView
 } from "react-native";
 import {useState, useEffect} from 'react';
 import {db } from "./firebase-config";
@@ -13,7 +14,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 export default function Home() {
 
-    const [data,setdata] = useState([]);
+    const [Profilesdata,setProfilesdata] = useState([]);
 
     useEffect(() => {
        
@@ -24,7 +25,7 @@ export default function Home() {
         const colRef = collection(db,"Profiles"); 
         const snapshots = await getDocs(colRef);
         const docs = snapshots.docs.map(doc => doc.data());
-        setdata(docs);
+        setProfilesdata(docs);
         console.log(docs);
     }
 
@@ -32,13 +33,13 @@ export default function Home() {
     
 
     return (
+        <ScrollView>
         <View>
-            {
-        data.map(data1 => (
-<View style={
+            {Profilesdata.map((data1) => {
+        return (
+            <View style={
             styles.container
         }>
-            <View>
                 <View>
                     <Image source={
                             {uri: data1.pic}
@@ -56,48 +57,22 @@ export default function Home() {
                         {
                         data1.name
                     }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="phone" color={"green"} size={20} />   {
-                        data1.phone
-                    }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="email" color={"red"} size={20} />   {
-                        data1.email
-                    }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="home" color={"pink"} size={20} />  {
-                        data1.address
-                    }</Text>
                 <Text style={
                         styles.location
                     }>{
                         data1.dist
-                    } {data1.state} <Text style={{color:"green"}
-                  }>PinCode :</Text> {
-                      data1.pin
-                  }</Text>
+                    } {data1.state}</Text>
                     <Text style={
                         styles.location
                     }><MaterialCommunityIcons name="account" color={"pink"} size={20} /> {
                         data1.category
-                    }               <Text style={{color:"red"}
-                  }>Avg Cost :</Text> {
-                      data1.avgcharge
-                  }</Text>
-                  <MaterialCommunityIcons name="bio" color={"pink"} size={30} />
-                    <Text style={
-                        styles.bio
-                    }>{
-                        data1.bio
-                    } </Text>
+                    }</Text>
                 </View>
-            </View>
         </View>
-        ))}
+        );
+      })}
         </View>
+        </ScrollView>
     );
 }
 
@@ -107,18 +82,18 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: 'black',
-        paddingTop:20,
-        paddingBottom:20,
+        paddingTop:10,
+        paddingBottom:10,
         borderColor:'black',
         borderRadius:10,
         margin:10,
-        marginTop:40
+        marginTop:20
     },
     profileImage: {
-        width: 150,
-        height: 150,
+        width: 100,
+        height: 100,
         borderRadius: 75,
-        marginTop: 10,
+        marginTop: 2,
         marginHorizontal:90
     },
     userInfo: {
@@ -128,19 +103,14 @@ const styles = StyleSheet.create({
     },
     username: {
         fontSize: 24,
-        marginTop: 20,
+        marginTop: 5,
         fontWeight: 'bold',
-        marginBottom: 10,
-        color: 'white'
-    },
-    bio: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 10,
+        marginBottom: 5,
         color: 'white'
     },
     location: {
         fontSize: 16,
-        color: 'white'
+        color: 'white',
+        margin:2
     }
 });
