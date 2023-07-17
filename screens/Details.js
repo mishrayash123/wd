@@ -3,18 +3,23 @@ import {
     Text,
     StyleSheet,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
 } from "react-native";
 import {useState, useEffect} from 'react';
 import {db } from "./firebase-config";
 import { collection } from "firebase/firestore";
 import {getDocs, } from "firebase/firestore";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Rating from 'react-native-star-rating';
+import RatingInput from 'react-native-star-rating';
+import Modal1 from 'react-native-modal';
 
 
 export default function Details({ route}) {
-
+    const [isVisible1, setIsVisible1] = useState(false);
     const [Profilesdata,setProfilesdata] = useState([]);
+    const [rating,setRating] = useState(0);
 
     useEffect(() => {
         getprofilesdata();
@@ -27,7 +32,9 @@ export default function Details({ route}) {
         setProfilesdata(docs);
     }
 
-   
+    const toggleModal1 = () => {
+        setIsVisible1(!isVisible1);
+    };
     
 
     return (
@@ -49,6 +56,7 @@ export default function Details({ route}) {
                     <View style={
                         styles.userInfo
                     }>
+                        <Rating stars={4} maxStars={5} size={25} />
                         <Text style={
                             styles.username
                         }>
@@ -93,7 +101,39 @@ export default function Details({ route}) {
                             data1.bio
                         } </Text>
                     </View>
-                
+                    <TouchableOpacity style={
+                    styles.loginBtn
+                }
+                onPress={toggleModal1}
+               >
+                <Text style={
+                    styles.loginText
+                }>Give Rating</Text>
+            </TouchableOpacity>
+
+                    <Modal1 isVisible={isVisible1}
+                    onBackdropPress={toggleModal1}>
+                    <View style={
+                        {
+                            backgroundColor: 'white',
+                            padding: 20,
+                            borderRadius: 25,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }
+                    }> 
+        <RatingInput rating={rating} setRating={setRating} size={50}  maxStars={5} bordered={false}  />
+        <TouchableOpacity style={
+                    styles.loginBtn1
+                }
+                // onPress={toggleModal1}
+               >
+                <Text style={
+                    styles.loginText1
+                }>Submit</Text>
+            </TouchableOpacity>
+                    </View>
+                </Modal1>
         </View>
         );
       })}
@@ -120,6 +160,7 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 75,
         marginTop: 2,
+        marginBottom:5,
         marginHorizontal:90
     },
     userInfo: {
@@ -144,5 +185,33 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
         margin:2
-    }
+    },
+    loginBtn: {
+        width: "40%",
+        borderRadius: 25,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 5,
+        backgroundColor: "white"
+    },
+    loginText: {
+        color: "red",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
+    loginBtn1: {
+        width: "40%",
+        borderRadius: 25,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 5,
+        backgroundColor: "pink"
+    },
+    loginText1: {
+        color: "blue",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
 });
