@@ -10,21 +10,23 @@ import {
 import {useState, useEffect} from 'react';
 import {Button, TextInput} from 'react-native';
 import Modal from 'react-native-modal';
+import Modal1 from 'react-native-modal';
 import * as ImagePicker from 'expo-image-picker';
 import {doc, setDoc} from "firebase/firestore";
 import {db} from "./firebase-config";
 import {getDoc} from "firebase/firestore";
 import {storage} from "./firebase-config";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
-import {onAuthStateChanged} from "firebase/auth";
-import {auth} from "./firebase-config";
 import {onSnapshot} from "firebase/firestore";
 import {Picker} from '@react-native-picker/picker';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { auth} from "./firebase-config";
+import {signOut} from "firebase/auth";
 
 
-export default function Profile() {
+export default function Profile({ route }) {
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisible1, setIsVisible1] = useState(false);
     const [name, setname] = useState('');
     const [email, setemail] = useState('');
     const [phone, setphone] = useState('');
@@ -34,29 +36,35 @@ export default function Profile() {
     const [avgcharge, setavgcharge] = useState('');
     const [url, seturl] = useState("");
     const [textoimage, settextoimage] = useState("");
-    const [uid1, setuid1] = useState("");
     const [data, setdata] = useState([]);
     const [dist, setdist] = useState('');
     const [state, setstate] = useState('');
     const [pin, setpin] = useState('');
+    const [len, setlen] = useState();
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setuid1(user.uid);
-            } else {
-                setuid1("");
-            }
-        });
         getprofiledata();
-    }, [auth.currentUser]);
+    }, []);
+
+    const logout = async () => {
+        signOut(auth).then(() => {
+            console.log("Successfully logout");
+        }).catch((error) => {});
+    };
 
 
     const getprofiledata = async () => {
-        const unsub = onSnapshot(doc(db, "Profiles", uid1), (doc) => {
-            setdata(doc.data());
-        });
-    }
+        const docRef = doc(db, "Profiles",route.params.uid );
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const unsub = onSnapshot(doc(db, "Profiles", route.params.uid), (doc) => {
+                setdata(doc.data());
+            });
+          } else {
+            setlen(0);
+          }
+   }
+
 
 
     const handleSelectImage = async () => {
@@ -72,7 +80,7 @@ export default function Profile() {
         if (! result.canceled) {
             const fetchResponse = await fetch(result.assets[0].uri);
             const theBlob = await fetchResponse.blob();
-            const imageRef = ref(storage, uid1);
+            const imageRef = ref(storage, route.params.uid);
             if (result.assets[0].uri) {
                 uploadBytes(imageRef, theBlob).then(() => {
                     getDownloadURL(imageRef).then((url) => {
@@ -87,9 +95,9 @@ export default function Profile() {
     };
 
     const handlesubmit = async () => {
-        const docRef = doc(db, "Profiles", uid1);
+        const docRef = doc(db, "Profiles", route.params.uid);
         const docSnap = await getDoc(docRef);
-        setDoc(doc(db, "Profiles", uid1), {
+        setDoc(doc(db, "Profiles", route.params.uid), {
             name: name,
             email: email,
             phone: phone,
@@ -105,80 +113,110 @@ export default function Profile() {
         settextoimage("")
         toggleModal();
     }
-
+    const toggleModal1 = () => {
+        setIsVisible1(!isVisible1);
+    };
 
     const toggleModal = () => {
         setIsVisible(!isVisible);
         getprofiledata();
     };
-
-    // const handleSubmit = () => {
-    // toggleModal();
-    // };
+    
     return (
       <ScrollView>
-        <View style={
-            styles.container
-        }>
-            <View>
-                <View>
-                    <Image source={
-                            {uri: data.pic}
-                        }
-                        style={
-                            styles.profileImage
-                        }/>
-                </View>
-                <View style={
-                    styles.userInfo
-                }>
-                    <Text style={
-                        styles.username
-                    }>
-                        {
-                        data.name
-                    }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="phone" color={"green"} size={20} />   {
-                        data.phone
-                    }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="email" color={"red"} size={20} />   {
-                        data.email
-                    }</Text>
-                    <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="home" color={"pink"} size={20} />  {
-                        data.address
-                    }</Text>
+        <TouchableOpacity style={
+                    styles.loginBtn2
+                }
+                onPress={
+                    () => toggleModal1()
+            }>
                 <Text style={
-                        styles.location
-                    }>{
-                        data.dist
-                    } {data.state} <Text style={{color:"green"}
-                  }>PinCode :</Text> {
-                      data.pin
-                  }</Text>
+                    styles.loginText2
+                }>Logout</Text>
+            </TouchableOpacity>
+        {
+            len===0 ?<View style={
+                styles.container
+            }><TouchableOpacity style={
+                styles.loginBtn
+            }
+            onPress={
+                () => toggleModal()
+        }>
+            <Text style={
+                styles.loginText
+            }>Update profile</Text>
+        </TouchableOpacity></View> : <ScrollView><View style={
+                styles.container
+            }>
+                    <View >
+                        <Image source={
+                                {uri: data.pic}
+                            }
+                            style={
+                                styles.profileImage
+                            }/>
+                    </View>
+                    <View style={
+                        styles.userInfo
+                    }>
+                        <Text style={
+                            styles.username
+                        }>
+                            {
+                            data.name
+                        }</Text>
+                        <Text style={
+                            styles.location
+                        }><MaterialCommunityIcons name="phone" color={"green"} size={20} />   {
+                            data.phone
+                        }</Text>
+                        <Text style={
+                            styles.location
+                        }><MaterialCommunityIcons name="email" color={"red"} size={20} />   {
+                            data.email
+                        }</Text>
+                        <Text style={
+                            styles.location
+                        }><MaterialCommunityIcons name="home" color={"pink"} size={20} />  {
+                            data.address
+                        }</Text>
                     <Text style={
-                        styles.location
-                    }><MaterialCommunityIcons name="account" color={"pink"} size={20} /> {
-                        data.category
-                    }               <Text style={{color:"red"}
-                  }>Avg Cost :</Text> {
-                      data.avgcharge
-                  }</Text>
-                  <MaterialCommunityIcons name="bio" color={"pink"} size={30} />
-                    <Text style={
-                        styles.bio
-                    }>{
-                        data.bio
-                    } </Text>
+                            styles.location
+                        }>{
+                            data.dist
+                        } {data.state} <Text style={{color:"green"}
+                      }>PinCode :</Text> {
+                          data.pin
+                      }</Text>
+                        <Text style={
+                            styles.location
+                        }><MaterialCommunityIcons name="account" color={"pink"} size={20} /> {
+                            data.category
+                        }               <Text style={{color:"red"}
+                      }>Avg Cost :</Text> {
+                          data.avgcharge
+                      }</Text>
+                      <MaterialCommunityIcons name="bio" color={"pink"} size={30} />
+                        <Text style={
+                            styles.bio
+                        }>{
+                            data.bio
+                        } </Text>
+                    </View>
+                    <TouchableOpacity style={
+                    styles.loginBtn
+                }
+                onPress={
+                    () => toggleModal()
+            }>
+                <Text style={
+                    styles.loginText
+                }>Update profile</Text>
+            </TouchableOpacity>
                 </View>
-            </View>
-            <ScrollView>
-            <View>
+                </ScrollView>
+        }
                 <Modal isVisible={isVisible}
                     onBackdropPress={toggleModal}>
                     <View style={
@@ -347,20 +385,33 @@ export default function Profile() {
                         </TouchableOpacity>
                     </View>
                 </Modal>
-            </View>
-            </ScrollView>
-            <TouchableOpacity style={
-                    styles.loginBtn
+                <Modal1 isVisible={isVisible1}
+                    onBackdropPress={toggleModal1}>
+                    <View style={
+                        {
+                            backgroundColor: 'white',
+                            padding: 20,
+                            borderRadius: 25,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }
+                    }>
+                       <TouchableOpacity style={
+                    styles.loginBtn2
                 }
                 onPress={
-                    () => toggleModal()
+                    () => {
+                        logout()
+                        toggleModal1()
+                    }
             }>
                 <Text style={
-                    styles.loginText
-                }>Update profile</Text>
+                    styles.loginText2
+                }>Logout</Text>
             </TouchableOpacity>
-        </View>
-        </ScrollView>
+                    </View>
+                </Modal1>
+                </ScrollView>
     );
 };
 
@@ -370,12 +421,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: 'black',
-        paddingTop:20,
+        paddingTop:10,
         paddingBottom:20,
         borderColor:'black',
         borderRadius:10,
         margin:10,
-        marginTop:40
+        marginTop:20
     },
     profileImage: {
         width: 150,
@@ -390,7 +441,7 @@ const styles = StyleSheet.create({
         
     },
     loginBtn: {
-        width: "80%",
+        width: "50%",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
@@ -414,6 +465,21 @@ const styles = StyleSheet.create({
     },
     loginText1: {
         color: "white",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
+    loginBtn2: {
+        width: "40%",
+        borderRadius: 25,
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+        marginLeft:10,
+        backgroundColor: "white"
+    },
+    loginText2: {
+        color: "red",
         fontSize: 14,
         fontWeight: 'bold'
     },

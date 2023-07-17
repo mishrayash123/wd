@@ -3,7 +3,8 @@ import {
     Text,
     StyleSheet,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
 } from "react-native";
 import {useState, useEffect} from 'react';
 import {db } from "./firebase-config";
@@ -12,7 +13,7 @@ import {getDocs, } from "firebase/firestore";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 
-export default function Home() {
+export default function Home({ navigation }) {
 
     const [Profilesdata,setProfilesdata] = useState([]);
 
@@ -26,7 +27,6 @@ export default function Home() {
         const snapshots = await getDocs(colRef);
         const docs = snapshots.docs.map(doc => doc.data());
         setProfilesdata(docs);
-        console.log(docs);
     }
 
    
@@ -37,7 +37,7 @@ export default function Home() {
         <View>
             {Profilesdata.map((data1) => {
         return (
-            <View style={
+            <View  key={data1.pic} style={
             styles.container
         }>
                 <View>
@@ -68,6 +68,19 @@ export default function Home() {
                         data1.category
                     }</Text>
                 </View>
+                <TouchableOpacity style={
+                    styles.loginBtn
+                }
+                onPress={() => {
+                    navigation.navigate('Details', {
+                      id:data1.email
+                    });
+                  }}
+               >
+                <Text style={
+                    styles.loginText
+                }>Full profile</Text>
+            </TouchableOpacity>
         </View>
         );
       })}
@@ -112,5 +125,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'white',
         margin:2
-    }
+    },
+    loginBtn: {
+        width: "40%",
+        borderRadius: 25,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 5,
+        backgroundColor: "pink"
+    },
+    loginText: {
+        color: "blue",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
 });
