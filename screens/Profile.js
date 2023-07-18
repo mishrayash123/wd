@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from "react";
+import {userid} from "../App"
 import {
     View,
     Text,
@@ -24,7 +25,8 @@ import { auth} from "./firebase-config";
 import {signOut} from "firebase/auth";
 
 
-export default function Profile({ route }) {
+export default function Profile() {
+    const id = useContext(userid);
     const [isVisible, setIsVisible] = useState(false);
     const [isVisible1, setIsVisible1] = useState(false);
     const [name, setname] = useState('');
@@ -42,22 +44,25 @@ export default function Profile({ route }) {
     const [pin, setpin] = useState('');
     const [len, setlen] = useState();
 
-    useEffect(() => {
-        getprofiledata();
-    }, []);
+  useEffect(() => {
+
+    getprofiledata();
+  }, []);
+
+
+
 
     const logout = async () => {
         signOut(auth).then(() => {
-            console.log("Successfully logout");
         }).catch((error) => {});
     };
 
 
     const getprofiledata = async () => {
-        const docRef = doc(db, "Profiles",route.params.uid );
+        const docRef = doc(db, "Profiles",id );
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-            const unsub = onSnapshot(doc(db, "Profiles", route.params.uid), (doc) => {
+            const unsub = onSnapshot(doc(db, "Profiles", id), (doc) => {
                 setdata(doc.data());
             });
           } else {
@@ -80,7 +85,7 @@ export default function Profile({ route }) {
         if (! result.canceled) {
             const fetchResponse = await fetch(result.assets[0].uri);
             const theBlob = await fetchResponse.blob();
-            const imageRef = ref(storage, route.params.uid);
+            const imageRef = ref(storage, id);
             if (result.assets[0].uri) {
                 uploadBytes(imageRef, theBlob).then(() => {
                     getDownloadURL(imageRef).then((url) => {
@@ -95,9 +100,9 @@ export default function Profile({ route }) {
     };
 
     const handlesubmit = async () => {
-        const docRef = doc(db, "Profiles", route.params.uid);
+        const docRef = doc(db, "Profiles", id);
         const docSnap = await getDoc(docRef);
-        setDoc(doc(db, "Profiles", route.params.uid), {
+        setDoc(doc(db, "Profiles", id), {
             name: name,
             email: email,
             phone: phone,

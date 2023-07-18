@@ -11,15 +11,11 @@ import {db } from "./firebase-config";
 import { collection } from "firebase/firestore";
 import {getDocs, } from "firebase/firestore";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Rating from 'react-native-star-rating';
-import RatingInput from 'react-native-star-rating';
-import Modal1 from 'react-native-modal';
+
 
 
 export default function Details({ route}) {
-    const [isVisible1, setIsVisible1] = useState(false);
     const [Profilesdata,setProfilesdata] = useState([]);
-    const [rating,setRating] = useState(0);
 
     useEffect(() => {
         getprofilesdata();
@@ -32,9 +28,10 @@ export default function Details({ route}) {
         setProfilesdata(docs);
     }
 
-    const toggleModal1 = () => {
-        setIsVisible1(!isVisible1);
+    const Book = () => {
+       
     };
+
     
 
     return (
@@ -56,7 +53,6 @@ export default function Details({ route}) {
                     <View style={
                         styles.userInfo
                     }>
-                        <Rating stars={4} maxStars={5} size={25} />
                         <Text style={
                             styles.username
                         }>
@@ -104,36 +100,12 @@ export default function Details({ route}) {
                     <TouchableOpacity style={
                     styles.loginBtn
                 }
-                onPress={toggleModal1}
+                onPress={Book}
                >
                 <Text style={
                     styles.loginText
-                }>Give Rating</Text>
+                }>Book</Text>
             </TouchableOpacity>
-
-                    <Modal1 isVisible={isVisible1}
-                    onBackdropPress={toggleModal1}>
-                    <View style={
-                        {
-                            backgroundColor: 'white',
-                            padding: 20,
-                            borderRadius: 25,
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }
-                    }> 
-        <RatingInput rating={rating} setRating={setRating} size={50}  maxStars={5} bordered={false}  />
-        <TouchableOpacity style={
-                    styles.loginBtn1
-                }
-                // onPress={toggleModal1}
-               >
-                <Text style={
-                    styles.loginText1
-                }>Submit</Text>
-            </TouchableOpacity>
-                    </View>
-                </Modal1>
         </View>
         );
       })}

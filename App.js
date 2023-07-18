@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth} from "./screens/firebase-config";
@@ -16,7 +15,7 @@ import Details from './screens/Details';
 
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const userid = createContext();
 
 
 
@@ -29,17 +28,18 @@ const App = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setisthereuser(true);
-        setuid1(user.uid);
+        setuid1(user.uid)
       } else {
         setisthereuser(false);
-        setuid1(user.uid);
+        setuid1("")
       }
     });
   }, [auth.currentUser]);
-
+  
 
   return (
     <NavigationContainer>
+      <userid.Provider value={uid1}>
       {
         isthereuser ? <Tab.Navigator>
         <Tab.Screen
@@ -55,7 +55,6 @@ const App = () => {
   <Tab.Screen
     name="Profile"
     component={Profile}
-    initialParams={{ uid: uid1}}
     options={{
       tabBarLabel: 'Profile',
       tabBarIcon: ({ color, size }) => (
@@ -89,6 +88,7 @@ const App = () => {
   />
         </Tab.Navigator> : <Login />
       }
+      </userid.Provider>
     </NavigationContainer>
   );
 };
@@ -96,3 +96,4 @@ const App = () => {
 
 
 export default App;
+export {userid};
