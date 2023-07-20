@@ -4,9 +4,11 @@ import {
     StyleSheet,
     Image,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    TextInput
 } from "react-native";
 import {useState, useEffect} from 'react';
+import Modal from 'react-native-modal';
 import {db } from "./firebase-config";
 import { collection } from "firebase/firestore";
 import {getDocs, } from "firebase/firestore";
@@ -14,8 +16,10 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 
 export default function Home({ navigation }) {
-
+    const [pincode, setpincode] = useState('');
+    const [city, setcity] = useState("");
     const [Profilesdata,setProfilesdata] = useState([]);
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
        
@@ -29,12 +33,110 @@ export default function Home({ navigation }) {
         setProfilesdata(docs);
     }
 
-   
+    const toggleModal = () => {
+        setIsVisible(!isVisible);
+    };
+
+    const Filter = () => {
+        setProfilesdata(Profilesdata.filter(e=>e.dist.toUpperCase()===city.toUpperCase()).filter(e=>parseInt(e.pin)===parseInt(pincode)));
+    };
     
 
     return (
         <ScrollView>
         <View>
+            <View style={{flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  }}>
+            <TouchableOpacity style={
+                    styles.loginBtn1
+                }
+                onPress={() => {
+                    toggleModal();
+                  }}
+               >
+                <Text style={
+                    styles.loginText1
+                }>Filter</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={
+                    styles.loginBtn1
+                }
+                onPress={() => {
+                    getprofilesdata();
+                  }}
+               >
+                <Text style={
+                    styles.loginText1
+                }>Reset Filter</Text>
+            </TouchableOpacity>
+            </View>
+            <Modal isVisible={isVisible}
+                    onBackdropPress={toggleModal}>
+                        <ScrollView>
+                    <View style={
+                        {
+                            backgroundColor: 'white',
+                            padding: 20,
+                            borderRadius: 25
+                        }
+                    }>
+                        <Text style={
+                                {
+                                    color: "blue",
+                                    padding:10,
+                                    fontSize:20,
+                                     marginBottom:10,
+                                     fontWeight:"bold"
+                                }
+                            }>
+                                Filter</Text>
+                       
+                        <TextInput style={
+                                {
+                                    height: 40,
+                                    borderColor: 'blue',
+                                    borderWidth: 1,
+                                    marginBottom: 10,
+                                    borderRadius: 25,
+                                    paddingLeft: 20
+                                }
+                            }
+                            onChangeText={setcity}
+                            value={city}
+                            placeholder="      District"/>
+                        
+                        <TextInput style={
+                                {
+                                    height: 40,
+                                    borderColor: 'blue',
+                                    borderWidth: 1,
+                                    marginBottom: 10,
+                                    borderRadius: 25,
+                                    paddingLeft: 20
+                                }
+                            }
+                            onChangeText={setpincode}
+                            value={pincode}
+                            placeholder="      PinCode"/>
+                        <TouchableOpacity style={
+                                styles.loginBtn1
+                            }
+                            onPress={
+                                () => {
+                                    Filter();
+                                    toggleModal();
+                                }
+                        }>
+                            <Text style={
+                                styles.loginText1
+                            }>Filter</Text>
+                        </TouchableOpacity>
+                    </View>
+                    </ScrollView>
+                </Modal>           
             {Profilesdata.map((data1) => {
         return (
             <View  key={data1.pic} style={
@@ -139,5 +241,20 @@ const styles = StyleSheet.create({
         color: "blue",
         fontSize: 14,
         fontWeight: 'bold'
+    },
+    loginBtn1: {
+        width: "40%",
+        borderRadius: 25,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 10,
+        backgroundColor: "blue",
+        marginLeft:25,
+    },
+    loginText1: {
+        color: "white",
+        fontSize: 18,
+        fontWeight: 'bold',
     },
 });
