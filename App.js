@@ -13,6 +13,7 @@ import Register from './screens/Register';
 import Forget from './screens/Forget';
 import Details from './screens/Details';
 import Create from './screens/Create';
+import Book from './screens/Book';
 
 
 const Tab = createBottomTabNavigator();
@@ -96,6 +97,12 @@ const App = () => {
   <Tab.Screen
     name="Register"
     component={Register}
+    options={{ tabBarButton: () => null,
+      tabBarVisible: false,}}
+  />
+  <Tab.Screen
+    name="Book"
+    component={Book}
     options={{ tabBarButton: () => null,
       tabBarVisible: false,}}
   />

@@ -14,7 +14,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 
 
-export default function Details({ route}) {
+export default function Details({ route,navigation}) {
     const [Profilesdata,setProfilesdata] = useState([]);
 
     useEffect(() => {
@@ -27,10 +27,6 @@ export default function Details({ route}) {
         const docs = snapshots.docs.map(doc => doc.data());
         setProfilesdata(docs);
     }
-
-    const Book = () => {
-       
-    };
 
     
 
@@ -100,7 +96,11 @@ export default function Details({ route}) {
                     <TouchableOpacity style={
                     styles.loginBtn
                 }
-                onPress={Book}
+                onPress={() => {
+                    navigation.navigate('Book', {
+                      id:data1.email
+                    });
+                  }}
                >
                 <Text style={
                     styles.loginText

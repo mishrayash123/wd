@@ -142,6 +142,12 @@ export default function Home({ navigation }) {
             <View  key={data1.pic} style={
             styles.container
         }>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: 10,
+            }}>
                 <View>
                     <Image source={
                             {uri: data1.pic}
@@ -169,6 +175,7 @@ export default function Home({ navigation }) {
                     }><MaterialCommunityIcons name="account" color={"pink"} size={20} /> {
                         data1.category
                     }</Text>
+                </View>
                 </View>
                 <TouchableOpacity style={
                     styles.loginBtn
@@ -209,15 +216,15 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 75,
         marginTop: 2,
-        marginHorizontal:90
+        marginHorizontal:0
     },
     userInfo: {
         alignItems: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 25
         
     },
     username: {
-        fontSize: 24,
+        fontSize: 18,
         marginTop: 5,
         fontWeight: 'bold',
         marginBottom: 5,
@@ -229,12 +236,11 @@ const styles = StyleSheet.create({
         margin:2
     },
     loginBtn: {
-        width: "40%",
+        width: "30%",
         borderRadius: 25,
         height: 30,
         alignItems: "center",
         justifyContent: "center",
-        marginTop: 5,
         backgroundColor: "pink"
     },
     loginText: {
