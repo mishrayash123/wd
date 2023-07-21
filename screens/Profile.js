@@ -47,7 +47,7 @@ export default function Profile() {
   useEffect(() => {
 
     getprofiledata();
-  }, []);
+  }, [data]);
 
 
 
@@ -227,6 +227,13 @@ export default function Profile() {
                             borderRadius: 25
                         }
                     }>
+                        <TouchableOpacity onPress={toggleModal}>
+              <Text style={{
+    fontSize: 25,
+    color: 'red',
+    marginLeft:250
+  }}>X</Text>
+            </TouchableOpacity>
                         <Text style={
                                 {
                                     color: "blue",

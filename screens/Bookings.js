@@ -22,7 +22,7 @@ export default function Bookings() {
     useEffect(() => {
        
         getprofilesdata();
-    }, []);
+    }, [Profilesdata]);
 
     const getprofilesdata = async () => {
         const colRef = collection(db,id); 

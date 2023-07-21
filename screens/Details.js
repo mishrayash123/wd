@@ -19,7 +19,7 @@ export default function Details({ route,navigation}) {
 
     useEffect(() => {
         getprofilesdata();
-    }, []);
+    }, [Profilesdata]);
 
     const getprofilesdata = async () => {
         const colRef = collection(db,"Profiles"); 

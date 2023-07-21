@@ -39,6 +39,7 @@ export default function Home({ navigation }) {
 
     const Filter = () => {
         setProfilesdata(Profilesdata.filter(e=>e.dist.toUpperCase()===city.toUpperCase()).filter(e=>parseInt(e.pin)===parseInt(pincode)));
+        toggleModal();
     };
     
 
@@ -72,7 +73,6 @@ export default function Home({ navigation }) {
                     styles.loginText1
                 }>Reset Filter</Text>
             </TouchableOpacity>
-            </View>
             <Modal isVisible={isVisible}
                     onBackdropPress={toggleModal}>
                         <ScrollView>
@@ -83,6 +83,13 @@ export default function Home({ navigation }) {
                             borderRadius: 25
                         }
                     }>
+                        <TouchableOpacity onPress={toggleModal}>
+              <Text style={{
+    fontSize: 25,
+    color: 'red',
+    marginLeft:250
+  }}>X</Text>
+            </TouchableOpacity>
                         <Text style={
                                 {
                                     color: "blue",
@@ -127,7 +134,6 @@ export default function Home({ navigation }) {
                             onPress={
                                 () => {
                                     Filter();
-                                    toggleModal();
                                 }
                         }>
                             <Text style={
@@ -136,7 +142,8 @@ export default function Home({ navigation }) {
                         </TouchableOpacity>
                     </View>
                     </ScrollView>
-                </Modal>           
+                </Modal>  
+            </View>         
             {Profilesdata.map((data1) => {
         return (
             <View  key={data1.pic} style={
@@ -197,6 +204,7 @@ export default function Home({ navigation }) {
         </ScrollView>
     );
 }
+
 
 
 const styles = StyleSheet.create({
