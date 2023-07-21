@@ -14,10 +14,14 @@ import Forget from './screens/Forget';
 import Details from './screens/Details';
 import Create from './screens/Create';
 import Book from './screens/Book';
+import Bookings from './screens/Bookings';
+import Inbox from './screens/Inbox';
+
 
 
 const Tab = createBottomTabNavigator();
 const userid = createContext();
+const Mailid = createContext();
 
 
 
@@ -26,15 +30,18 @@ const App = () => {
   const [isthereuser, setisthereuser] = useState();
   const [isprofile, setisprofile] = useState(true);
   const [uid1, setuid1] = useState("");
+  const [mail, setmail] = useState("");
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setisthereuser(true);
         setuid1(user.uid)
+        setmail(user.email);
       } else {
         setisthereuser(false);
         setuid1("")
+        setmail("")
       }
     });
     getprofiledata();
@@ -54,6 +61,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <userid.Provider value={uid1}> 
+      <Mailid.Provider value={mail}>
+      <>
       {
         isthereuser ? <Tab.Navigator>
         <Tab.Screen
@@ -84,6 +93,26 @@ const App = () => {
   }}
 />
   }
+  <Tab.Screen
+    name="Inbox"
+    component={Inbox}
+    options={{
+      tabBarLabel: 'Inbox',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="message" color={color} size={size}/>
+      ),
+    }}
+  />
+  <Tab.Screen
+    name="Bookings"
+    component={Bookings}
+    options={{
+      tabBarLabel: 'Bookings',
+      tabBarIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="book" color={color} size={size}/>
+      ),
+    }}
+  />
   <Tab.Screen
     name="Profile"
     component={Profile}
@@ -126,6 +155,8 @@ const App = () => {
   />
         </Tab.Navigator> : <Login />
       }
+      </>
+      </Mailid.Provider> 
       </userid.Provider>
     </NavigationContainer>
   );
@@ -134,4 +165,4 @@ const App = () => {
 
 
 export default App;
-export {userid};
+export {userid,Mailid};

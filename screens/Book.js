@@ -12,41 +12,45 @@ import {TextInput} from 'react-native';
 import {doc, setDoc} from "firebase/firestore";
 import {db} from "./firebase-config";
 import {getDoc} from "firebase/firestore";
-import * as SMS from 'expo-sms';
 
 
-export default function Book({route}) {
+export default function Book({route,navigation}) {
     const id = useContext(userid);
     const [name, setname] = useState('');
     const [email, setemail] = useState('');
     const [phone, setphone] = useState('');
     const [bio, setbio] = useState('');
+    const [clas, setclas] = useState('');
     const [address, setaddress] = useState('');
     
-
+// request
     const handlesubmit = async () => {
-        const docRef = doc(db, "Requests", route.params.id);
+        const docRef = doc(db,route.params.id,clas);
         const docSnap = await getDoc(docRef);
-        setDoc(doc(db, "Requests", route.params.id), {
+        setDoc(doc(db, route.params.id, clas), {
             name: name,
-            email: email,
+            email: route.params.id,
             phone: phone,
             bio: bio,
+            class:clas,
             address: address,
         });
     }
 
+    //bookings
     const handlesubmit1 = async () => {
-        const docRef = doc(db, "Bookings", id);
+        const docRef = doc(db,id, clas);
         const docSnap = await getDoc(docRef);
-        setDoc(doc(db, "Bookings", id), {
+        setDoc(doc(db,id, clas), {
             name: name,
             email: email,
             phone: phone,
             bio: bio,
+            class:clas,
             address: address,
             id1:id
         });
+        navigation.navigate('Bookings');
     }
 
     return (
@@ -107,6 +111,21 @@ export default function Book({route}) {
                             onChangeText={setphone}
                             value={phone}
                             placeholder="      Phone"/>
+                            <TextInput style={
+                                {
+                                    height: 40,
+                                    borderColor: 'blue',
+                                    borderWidth: 1,
+                                    marginBottom: 10,
+                                    borderRadius: 25,
+                                    paddingLeft: 20
+                                }
+                            }
+                            multiline={true}
+                            numberOfLines={4}
+                            onChangeText={setclas}
+                            value={clas}
+                            placeholder="    Class"/>
                         <TextInput style={
                                 {
                                     height: 40,
@@ -140,7 +159,7 @@ export default function Book({route}) {
                             }
                             onPress={
                                 () => {
-                                    // handlesubmit()
+                                    handlesubmit()
                                     handlesubmit1()
                                 } 
                         }>
