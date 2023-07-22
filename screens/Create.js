@@ -75,7 +75,7 @@ export default function Create() {
             pin: pin,
             category: category,
             avgcharge: avgcharge,
-            pic: url
+            pic: url,
         });
         settextoimage("")
     }

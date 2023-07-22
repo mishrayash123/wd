@@ -179,12 +179,10 @@ export default function Home({ navigation }) {
                     } {data1.state}</Text>
                     <Text style={
                         styles.location
-                    }><MaterialCommunityIcons name="account" color={"pink"} size={20} /> {
+                    }><MaterialCommunityIcons name="account" color={"blue"} size={20} /> {
                         data1.category
                     }</Text>
-                </View>
-                </View>
-                <TouchableOpacity style={
+                    <TouchableOpacity style={
                     styles.loginBtn
                 }
                 onPress={() => {
@@ -197,6 +195,8 @@ export default function Home({ navigation }) {
                     styles.loginText
                 }>Full profile</Text>
             </TouchableOpacity>
+                </View>
+                </View>
         </View>
         );
       })}
@@ -211,10 +211,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: 'black',
-        paddingTop:10,
-        paddingBottom:10,
-        borderColor:'black',
+        backgroundColor: 'pink',
+        paddingTop:4,
+        paddingBottom:5,
+        borderColor:'pink',
         borderRadius:10,
         margin:10,
         marginTop:20
@@ -223,7 +223,9 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         borderRadius: 75,
-        marginTop: 2,
+        borderColor:"white",
+        borderWidth:2,
+        marginTop: 0,
         marginHorizontal:0
     },
     userInfo: {
@@ -233,26 +235,28 @@ const styles = StyleSheet.create({
     },
     username: {
         fontSize: 18,
-        marginTop: 5,
+        marginTop: 0,
         fontWeight: 'bold',
-        marginBottom: 5,
-        color: 'white'
+        marginBottom: 0,
+        color: 'black'
     },
     location: {
-        fontSize: 16,
-        color: 'white',
-        margin:2
+        fontSize: 14,
+        color: 'black',
+        fontWeight: 'bold',
+        margin:0
     },
     loginBtn: {
-        width: "30%",
+        width: "60%",
         borderRadius: 25,
-        height: 30,
+        height: 25,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "pink"
+        backgroundColor: "black",
+        marginTop:5
     },
     loginText: {
-        color: "blue",
+        color: "white",
         fontSize: 14,
         fontWeight: 'bold'
     },

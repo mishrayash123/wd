@@ -13,7 +13,7 @@ import {
 } from "react-native";
 
 
-export default function Forget() {
+export default function Forget({navigation}) {
   const [email, setEmail] = useState("");
   const [err, seterr] = useState("");
 
@@ -29,7 +29,7 @@ export default function Forget() {
 };
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.image} source={require("./assets/log2.png")} />  */}
+      <Image style={styles.image} source={require("./Seekguru.png")} /> 
       <StatusBar style="auto" />
       <Text style={styles.forgot_button}>Send a Password reset mail....</Text> 
       <View style={styles.inputView}>
@@ -40,7 +40,10 @@ export default function Forget() {
           onChangeText={(email) => setEmail(email)}
         /> 
       </View>
-      <Text style={styles.err}>{err}</Text>  
+      <Text style={styles.err}>{err}</Text>
+      <TouchableOpacity>
+        <Text style={styles.forgot_button} onPress={() => navigation.navigate("Login")}>Log in</Text> 
+      </TouchableOpacity>   
       <TouchableOpacity style={styles.loginBtn} onPress={() => forgetpassword()}>
         <Text style={styles.loginText}>Send</Text> 
       </TouchableOpacity> 
@@ -55,14 +58,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    marginBottom: 40,
+    marginBottom: 0,
   },
   inputView: {
     backgroundColor: "#FFC0CB",
     borderRadius: 30,
     width: "70%",
     height: 45,
-    marginBottom: 20,
+    marginBottom: 0,
     alignItems: "center",
   },
   TextInput: {
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
   forgot_button: {
     height: 30,
     marginBottom: 5,
+    color:"blue"
   },
   loginBtn: {
     width: "80%",

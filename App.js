@@ -5,6 +5,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { onAuthStateChanged } from "firebase/auth";
 import { auth} from "./screens/firebase-config";
 
+
 // Import your screen components
 import Home from './screens/Home';
 import Profile from './screens/Profile';
@@ -16,12 +17,13 @@ import Create from './screens/Create';
 import Book from './screens/Book';
 import Bookings from './screens/Bookings';
 import Inbox from './screens/Inbox';
-
+import CustomHeader from './components/CustomHeader';
 
 
 const Tab = createBottomTabNavigator();
 const userid = createContext();
 const Mailid = createContext();
+
 
 
 
@@ -70,6 +72,7 @@ const App = () => {
     component={Home}
     options={{
       tabBarLabel: 'Home',
+      header: () => <CustomHeader Title={"Home"}/>,
       tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="home" color={color} size={size}/>
       ),
@@ -80,13 +83,15 @@ const App = () => {
     name="Create"
     component={Create}
     options={{ tabBarButton: () => null,
-      tabBarVisible: false,}}
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Create"}/>,}}
   />
   : <Tab.Screen
   name="Create"
   component={Create}
   options={{
     tabBarLabel: 'Create Profile',
+    header: () => <CustomHeader Title={"Create"}/>,
     tabBarIcon: ({ color, size }) => (
       <MaterialCommunityIcons name="creation" color={"red"} size={30}/>
     ),
@@ -98,6 +103,7 @@ const App = () => {
     component={Inbox}
     options={{
       tabBarLabel: 'Inbox',
+      header: () => <CustomHeader Title={"Inbox"}/>,
       tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="message" color={color} size={size}/>
       ),
@@ -108,6 +114,7 @@ const App = () => {
     component={Bookings}
     options={{
       tabBarLabel: 'Bookings',
+      header: () => <CustomHeader Title={"Bookings"}/>,
       tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="book" color={color} size={size}/>
       ),
@@ -118,42 +125,50 @@ const App = () => {
     component={Profile}
     options={{
       tabBarLabel: 'Profile',
+      header: () => <CustomHeader Title={"Profile"}/>,
       tabBarIcon: ({ color, size }) => (
         <MaterialCommunityIcons name="account" color={color} size={size}/>
       ),
     }}
   />
   <Tab.Screen
-    name="Register"
-    component={Register}
-    options={{ tabBarButton: () => null,
-      tabBarVisible: false,}}
-  />
-  <Tab.Screen
     name="Book"
     component={Book}
     options={{ tabBarButton: () => null,
-      tabBarVisible: false,}}
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Book"}/>,}}
   />
   <Tab.Screen
     name="Details"
     component={Details}
     options={{ tabBarButton: () => null,
-      tabBarVisible: false,}}
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Details"}/>,}}
   />
-  <Tab.Screen
+  
+        </Tab.Navigator> : <Tab.Navigator initialRouteName='Login'>
+        <Tab.Screen
+    name="Register"
+    component={Register}
+    options={{ tabBarButton: () => null,
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Register"}/>,}}
+  />
+        <Tab.Screen
     name="Login"
     component={Login}
     options={{  tabBarButton: () => null,
-      tabBarVisible: false, }}
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Log in"}/>, }}
   />
   <Tab.Screen
     name="Forget"
     component={Forget}
     options={{ tabBarButton: () => null,
-      tabBarVisible: false,}}
+      tabBarVisible: false,
+      header: () => <CustomHeader Title={"Forget"}/>,}}
   />
-        </Tab.Navigator> : <Login />
+        </Tab.Navigator>
       }
       </>
       </Mailid.Provider> 

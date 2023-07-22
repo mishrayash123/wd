@@ -31,7 +31,7 @@ export default function Register({ navigation}) {
 
   return (
     <View style={styles.container}>
-      {/* <Image style={styles.image} source={require("./assets/log2.png")} />  */}
+      <Image style={styles.image} source={require("./Seekguru.png")} /> 
       <StatusBar style="auto" />
       <View style={styles.inputView}>
         <TextInput
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   image: {
-    marginBottom: 40,
+    marginBottom: 0,
   },
   inputView: {
     backgroundColor: "#FFC0CB",
