@@ -116,6 +116,7 @@ export default function Profile() {
             pic: url
         });
         settextoimage("")
+        alert("Updated");
         toggleModal();
     }
     const toggleModal1 = () => {

@@ -20,10 +20,10 @@ export default function Forget({navigation}) {
 
   const forgetpassword = async () => {
     sendPasswordResetEmail(auth, email).then(() => {
-        // alert("Password reset email sent to your provided email");
+        alert("Password reset email sent to your provided email");
     }).catch((error) => {
         const errorCode = error.code;
-        seterr(errorCode);
+        alert(errorCode);
     });
 
 };
@@ -40,7 +40,6 @@ export default function Forget({navigation}) {
           onChangeText={(email) => setEmail(email)}
         /> 
       </View>
-      <Text style={styles.err}>{err}</Text>
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Login")}>Log in</Text> 
       </TouchableOpacity>   
@@ -89,9 +88,5 @@ const styles = StyleSheet.create({
   },
   loginText :{
     color : "white"
-  },
-  err : {
-    color :"red",
-    marginBottom: 5,
   }
 });

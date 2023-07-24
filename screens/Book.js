@@ -50,6 +50,7 @@ export default function Book({route,navigation}) {
             address: address,
             id1:id
         });
+        alert("Your message has been sent.......Tuter will contact you with in 24 hours....")
         navigation.navigate('Bookings');
     }
 

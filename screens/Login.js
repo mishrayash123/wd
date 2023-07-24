@@ -15,17 +15,15 @@ import {
 
 export default function Login({ navigation}) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [err, seterr] = useState("");
+  const [password, setPassword] = useState(""); 
 
   const login = async () => {
     signInWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
         const user = userCredential.user;
-        // console.log("user signed in successfully")
-        // ...
+        alert("User signed in successfully");
     }).catch((error) => {
         const errorCode = error.code;
-        seterr(errorCode);
+      alert(errorCode);
     });
     
 };
@@ -52,7 +50,6 @@ export default function Login({ navigation}) {
           onChangeText={(password) => setPassword(password)}
         /> 
       </View>
-      <Text style={styles.err}>{err}</Text>  
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Forget")}>Forget Password ?</Text> 
       </TouchableOpacity> 
@@ -105,8 +102,5 @@ const styles = StyleSheet.create({
   },
   loginText :{
     color : "white"
-  },
-  err : {
-    color :"red"
   }
 });

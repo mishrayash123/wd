@@ -78,6 +78,7 @@ export default function Create() {
             pic: url,
         });
         settextoimage("")
+        alert("Profile Created");
     }
 
     return (

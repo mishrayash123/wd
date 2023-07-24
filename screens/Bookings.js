@@ -37,7 +37,7 @@ export default function Bookings() {
        <View>    
             {Profilesdata.filter(e=>e.id1.toUpperCase()===id.toUpperCase()).map((data1) => {
         return (
-            <View  key={data1.email} style={
+            <View  key={data1.class} style={
             styles.container
         }>
             <View style={{

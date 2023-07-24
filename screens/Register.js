@@ -16,15 +16,14 @@ import {auth} from './firebase-config';
 export default function Register({ navigation}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, seterr] = useState("");
 
   const signup = async () => {
     createUserWithEmailAndPassword(auth, email, password).then((userCredential) => { // Signed in
         const user = userCredential.user;
-        // console.log("user signed up successfully")
+        alert("user signed up successfully")
     }).catch((error) => {
         const errorCode = error.code;
-        seterr(errorCode);
+        alert(errorCode);
     });
 };
 
@@ -49,8 +48,7 @@ export default function Register({ navigation}) {
           secureTextEntry={true}
           onChangeText={(password) => setPassword(password)}
         /> 
-      </View>
-      <Text style={styles.err}>{err}</Text>    
+      </View>   
       <TouchableOpacity>
         <Text style={styles.forgot_button} onPress={() => navigation.navigate("Login")}>Already have an Account ?</Text> 
       </TouchableOpacity> 
@@ -101,7 +99,4 @@ const styles = StyleSheet.create({
   loginText :{
     color : "white"
   },
-  err : {
-    color :"red"
-  }
 });
