@@ -13,19 +13,18 @@ import {Button, TextInput} from 'react-native';
 import Modal from 'react-native-modal';
 import Modal1 from 'react-native-modal';
 import * as ImagePicker from 'expo-image-picker';
-import {doc, setDoc} from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import {db} from "./firebase-config";
 import {getDoc} from "firebase/firestore";
 import {storage} from "./firebase-config";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
 import {onSnapshot} from "firebase/firestore";
-import {Picker} from '@react-native-picker/picker';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { auth} from "./firebase-config";
 import {signOut} from "firebase/auth";
 
 
-export default function Profile() {
+export default function Profile({navigation}) {
     const id = useContext(userid);
     const [isVisible, setIsVisible] = useState(false);
     const [isVisible1, setIsVisible1] = useState(false);
@@ -34,7 +33,6 @@ export default function Profile() {
     const [phone, setphone] = useState('');
     const [bio, setbio] = useState('');
     const [address, setaddress] = useState('');
-    const [category, setcategory] = useState('Tuter');
     const [avgcharge, setavgcharge] = useState('');
     const [url, seturl] = useState("");
     const [textoimage, settextoimage] = useState("");
@@ -100,9 +98,8 @@ export default function Profile() {
     };
 
     const handlesubmit = async () => {
-        const docRef = doc(db, "Profiles", id);
-        const docSnap = await getDoc(docRef);
-        setDoc(doc(db, "Profiles", id), {
+        const washingtonRef = doc(db, "Profiles", id);
+        await updateDoc(washingtonRef, {
             name: name,
             email: email,
             phone: phone,
@@ -111,10 +108,9 @@ export default function Profile() {
             state: state,
             dist: dist,
             pin: pin,
-            category: category,
             avgcharge: avgcharge,
-            pic: url
-        });
+            pic: url,
+          });
         settextoimage("")
         alert("Updated");
         toggleModal();
@@ -147,6 +143,17 @@ export default function Profile() {
                 <Text style={
                             styles.location
                         }>Please Create your Profile for Shining/Earning..........</Text>
+                        <TouchableOpacity style={
+                    styles.loginBtn3
+                }
+                onPress={() => {
+                    navigation.navigate('Create');
+                  }}
+               >
+                <Text style={
+                    styles.loginText3
+                }>Create profile</Text>
+            </TouchableOpacity>
             </View> : <ScrollView><View style={
                 styles.container
             }>
@@ -158,6 +165,14 @@ export default function Profile() {
                                 styles.profileImage
                             }/>
                     </View>
+                    <TouchableOpacity style={
+                    styles.loginBtn4
+                }
+               >
+                <Text style={
+                    styles.loginText4
+                }>{data.status}</Text>
+            </TouchableOpacity>
                     <View style={
                         styles.userInfo
                     }>
@@ -225,7 +240,7 @@ export default function Profile() {
                         {
                             backgroundColor: 'white',
                             padding: 20,
-                            borderRadius: 25
+                            borderRadius: 25,
                         }
                     }>
                         <TouchableOpacity onPress={toggleModal}>
@@ -442,7 +457,7 @@ const styles = StyleSheet.create({
         borderColor:'black',
         borderRadius:10,
         margin:10,
-        marginTop:20
+        marginTop:20,
     },
     profileImage: {
         width: 150,
@@ -499,9 +514,23 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold'
     },
+    loginBtn3: {
+        width: "80%",
+        borderRadius: 25,
+        height: 40,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 5,
+        backgroundColor: "white"
+    },
+    loginText3: {
+        color: "red",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
     username: {
         fontSize: 24,
-        marginTop: 20,
+        marginTop: 0,
         fontWeight: 'bold',
         marginBottom: 10,
         color: 'white'
@@ -515,5 +544,19 @@ const styles = StyleSheet.create({
     location: {
         fontSize: 16,
         color: 'white'
-    }
+    },
+    loginBtn4: {
+        width: "30%",
+        borderRadius: 25,
+        height: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 5,
+        backgroundColor: "pink"
+    },
+    loginText4: {
+        color: "blue",
+        fontSize: 14,
+        fontWeight: 'bold'
+    },
 });

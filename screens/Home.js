@@ -144,7 +144,7 @@ export default function Home({ navigation }) {
                     </ScrollView>
                 </Modal>  
             </View>         
-            {Profilesdata.map((data1) => {
+            {Profilesdata.filter(e=>e.status.toUpperCase()==="VERIFIED").map((data1) => {
         return (
             <View  key={data1.pic} style={
             styles.container

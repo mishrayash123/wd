@@ -15,7 +15,6 @@ import {db} from "./firebase-config";
 import {getDoc} from "firebase/firestore";
 import {storage} from "./firebase-config";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage"
-import {Picker} from '@react-native-picker/picker';
 
 
 export default function Create() {
@@ -32,6 +31,8 @@ export default function Create() {
     const [dist, setdist] = useState('');
     const [state, setstate] = useState('');
     const [pin, setpin] = useState('');
+    const [qurl, setqurl] = useState("");
+    const [textoimage1, settextoimage1] = useState("");
 
    
     const handleSelectImage = async () => {
@@ -61,6 +62,33 @@ export default function Create() {
         }
     };
 
+    const handleSelectImage1 = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [
+                4, 3
+            ],
+            quality: 1
+        });
+
+        if (! result.canceled) {
+            const fetchResponse = await fetch(result.assets[0].uri);
+            const theBlob = await fetchResponse.blob();
+            const imageRef = ref(storage, id+"qualification");
+            if (result.assets[0].uri) {
+                uploadBytes(imageRef, theBlob).then(() => {
+                    getDownloadURL(imageRef).then((url) => {
+                        settextoimage1("Image Selected")
+                        setqurl(url);
+                    }).catch((error) => {})
+                }).catch((error) => {
+                    console.log(error.message);
+                })
+            }
+        }
+    };
+
     const handlesubmit = async () => {
         const docRef = doc(db, "Profiles", id);
         const docSnap = await getDoc(docRef);
@@ -76,8 +104,11 @@ export default function Create() {
             category: category,
             avgcharge: avgcharge,
             pic: url,
+            status:"Under review",
+            qualification:qurl
         });
         settextoimage("")
+        settextoimage1("")
         alert("Profile Created");
     }
 
@@ -235,12 +266,24 @@ export default function Create() {
                                 }
                             }>
                                 {textoimage}</Text>
-                                {/* <Picker selectedValue={category}
-                            onValueChange={
-                                (itemValue, itemIndex) => setcategory(itemValue)
-                        }>
-                            <Picker.Item label="Tuter" value="Tuter"/>
-                        </Picker> */}
+                        </View>
+                        <View>
+                            <Text style={
+                                {
+                                    color: "red",
+                                    margin: 2
+                                }
+                            }>
+                                * Upload your higher qualification</Text>
+                            <Button title="Profile Image"
+                                onPress={handleSelectImage1}/>
+                            <Text style={
+                                {
+                                    color: "red",
+                                    margin: 2
+                                }
+                            }>
+                                {textoimage1}</Text>
                         </View>
                         <TouchableOpacity style={
                                 styles.loginBtn1

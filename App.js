@@ -5,7 +5,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { onAuthStateChanged } from "firebase/auth";
 import { auth} from "./screens/firebase-config";
 
-
 // Import your screen components
 import Home from './screens/Home';
 import Profile from './screens/Profile';
@@ -30,7 +29,6 @@ const Mailid = createContext();
 
 const App = () => {
   const [isthereuser, setisthereuser] = useState();
-  const [isprofile, setisprofile] = useState(true);
   const [uid1, setuid1] = useState("");
   const [mail, setmail] = useState("");
 
@@ -46,18 +44,9 @@ const App = () => {
         setmail("")
       }
     });
-    getprofiledata();
   }, [auth.currentUser]);
 
-  const getprofiledata = async () => {
-    const docRef = doc(db, "Profiles",uid1 );
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        setisprofile(true);
-      } else {
-        setisprofile(false);
-      }
-}
+  
   
 
   return (
@@ -78,26 +67,12 @@ const App = () => {
       ),
     }}
   />
-  {
-    isprofile ? <Tab.Screen
+ <Tab.Screen
     name="Create"
     component={Create}
     options={{ tabBarButton: () => null,
-      tabBarVisible: false,
-      header: () => <CustomHeader Title={"Create"}/>,}}
+      tabBarVisible: false,}}
   />
-  : <Tab.Screen
-  name="Create"
-  component={Create}
-  options={{
-    tabBarLabel: 'Create Profile',
-    header: () => <CustomHeader Title={"Create"}/>,
-    tabBarIcon: ({ color, size }) => (
-      <MaterialCommunityIcons name="creation" color={"red"} size={30}/>
-    ),
-  }}
-/>
-  }
   <Tab.Screen
     name="Inbox"
     component={Inbox}
